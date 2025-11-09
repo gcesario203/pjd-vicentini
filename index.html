@@ -1,793 +1,290 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>The Legend of Zelda: Shadow Heir</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root{
-      --pure-green:#2d5016; --pure-gold:#d4af37; --corrupt-red:#8b0000; --corrupt-purple:#4a0e4e;
-      --dark-bg:#0a0a0a; --light-text:#f5f5dc; --muted:#ccccb3;
-      --accent: var(--pure-gold);
-    }
-    html{ scroll-behavior:smooth; }
-    body{
-      font-family: Georgia, serif;
-      background: linear-gradient(180deg, var(--dark-bg) 0%, #111 100%);
-      color: var(--light-text);
-      line-height: 1.6;
-      overflow-x:hidden;
-    }
-    a{ color: var(--pure-gold); text-decoration: none; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Legend of Zelda: Shadow Heir</title>
+<style>
+/* ===== BASE GLOBAL ===== */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+html{scroll-behavior:smooth;}
+body{background:#04041b;color:#fff;line-height:1.6;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;transition:.3s;}
+a:hover{color:#9f85ff;}
+section{padding:80px 10%;max-width:1400px;margin:auto;}
+img{max-width:100%;display:block;border-radius:10px;}
 
-    /* Navbar */
-    header{
-      position: sticky; top:0; z-index: 50;
-      backdrop-filter: blur(6px);
-      background: rgba(10,10,10,0.6);
-      border-bottom: 1px solid rgba(212,175,55,0.2);
-    }
-    .nav{
-      max-width: 1200px; margin: 0 auto; padding: .8rem 1rem;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .logo{ display:flex; align-items: center; gap:.6rem; color: var(--pure-gold); font-weight: bold; }
-    .logo .tri{ font-size: 1.2rem; filter: drop-shadow(0 0 6px var(--pure-gold)); }
-    .nav ul{ display:flex; gap:1rem; list-style: none; flex-wrap: wrap; }
-    .nav a{ padding:.4rem .6rem; border-radius:6px; transition: .2s; color: var(--muted); }
-    .nav a:hover{ background: rgba(212,175,55,0.1); color: var(--light-text); }
+/* ===== HEADER ===== */
+header{position:fixed;top:0;width:100%;background:rgba(4,4,27,.85);backdrop-filter:blur(8px);
+display:flex;justify-content:space-between;align-items:center;padding:18px 10%;z-index:1000;
+border-bottom:1px solid rgba(255,255,255,0.1);}
+header h1{font-weight:700;letter-spacing:2px;}
+nav a{margin-left:25px;font-size:0.95rem;}
+nav a:hover{color:#9f85ff;}
 
-    /* Sections */
-    section{ padding: 5rem 1.5rem; max-width: 1200px; margin: 0 auto; }
-    h1{ font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: 1px; text-shadow: 0 0 20px rgba(212,175,55,.5); }
-    h2{ font-size: clamp(1.6rem, 3.5vw, 2.4rem); color: var(--pure-gold); text-align: center; margin-bottom: 2rem; text-shadow: 0 0 16px rgba(212,175,55,.35); }
-    .subtitle{ color: var(--pure-gold); font-style: italic; margin-top: .5rem; }
+/* ===== HERO ===== */
+#hero{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+text-align:center;background:linear-gradient(rgba(10,10,30,0.6),rgba(4,4,27,0.8)),
+url('./images/ambient/pure-kingdom.png') center/cover no-repeat;}
+#hero h1{font-size:3.5rem;font-weight:800;margin-bottom:10px;}
+#hero p{max-width:700px;color:#ccc;margin-bottom:30px;}
+.btn{display:inline-block;border:2px solid #fff;padding:10px 25px;border-radius:50px;font-weight:500;}
+.btn:hover{background:#fff;color:#04041b;}
 
-    /* HERO with Before/After slider */
-    .hero-wrap{
-      position: relative; width: 100%; height: min(75vh, 700px);
-      overflow: hidden; border-bottom: 1px solid rgba(212,175,55,.2);
-      background: #000;
-    }
-    .hero-img{
-      position:absolute; inset:0;
-      display:block; width:100%; height:100%; object-fit: cover;
-      filter: saturate(1.05) contrast(1.05);
-    }
-    .hero-overlay{
-      position: absolute; inset:0;
-      background: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.65));
-      pointer-events: none;
-    }
-    .hero-layer{ position:absolute; inset:0; overflow:hidden; }
-    .hero-layer .hero-img{ width:100%; height:100%; object-fit: cover; }
-    .after-clip{ width:50%; border-right: 2px solid var(--pure-gold); box-shadow: 10px 0 30px rgba(212,175,55,.25) inset; }
-    .slider-handle{
-      position: absolute; top: 50%; transform: translateY(-50%);
-      left: calc(50% - 18px);
-      width: 36px; height: 36px; border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #fff, #eee);
-      border: 2px solid var(--pure-gold);
-      box-shadow: 0 0 20px rgba(212,175,55,.6), 0 8px 24px rgba(0,0,0,.45);
-      cursor: ew-resize; z-index: 5;
-    }
-    .slider-tip{
-      position:absolute; bottom: 16px; left:50%; transform: translateX(-50%);
-      background: rgba(0,0,0,.5); border:1px solid rgba(212,175,55,.3);
-      padding:.4rem .7rem; border-radius: 8px; font-size:.9rem; color: var(--muted);
-    }
-    .hero-content{
-      position:absolute; inset: 0; display:flex; align-items:center; justify-content:center; text-align:center; z-index: 4; padding: 1rem;
-    }
-    .hero-inner{ max-width: 900px; }
-    .tagline{ margin:1rem auto 1.5rem; max-width: 700px; color: #e8e6d3; }
-    .cta{
-      display: inline-block; margin-top:.2rem;
-      padding: .9rem 1.6rem; border-radius: 6px; text-transform: uppercase; letter-spacing: .06em;
-      border: 1px solid var(--pure-gold); color: #fff;
-      background: linear-gradient(135deg, rgba(45,80,22,.8), rgba(139,0,0,.75));
-      box-shadow: 0 8px 24px rgba(212,175,55,.25);
-      transition: .25s;
-    }
-    .cta:hover{ transform: translateY(-2px); box-shadow: 0 12px 28px rgba(212,175,55,.4); }
+/* ===== GENERIC TITLES ===== */
+.section-title{font-size:2rem;margin-bottom:50px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
 
-    /* STORY */
-    .story-grid{
-      display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem;
-    }
-    .story-card{
-      background: rgba(255,255,255,.05); border: 1px solid rgba(212,175,55,.25);
-      border-radius: 12px; overflow:hidden; transition: .25s;
-    }
-    .story-card:hover{ transform: translateY(-4px); border-color: var(--pure-gold); box-shadow: 0 12px 28px rgba(212,175,55,.2); }
-    .story-media{ width:100%; aspect-ratio: 3 / 2; object-fit: cover; display:block; }
-    .story-body{ padding: 1rem 1rem 1.3rem; }
-    .story-body h3{ color: var(--pure-gold); margin-bottom:.4rem; }
+/* ===== STORY ===== */
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:25px;}
+.story-card{background:#0d0e32;padding:20px;border-radius:10px;transition:.3s;}
+.story-card:hover{transform:translateY(-5px);}
+.story-card h3{margin:10px 0;font-size:1.2rem;color:#9f85ff;}
+.story-card p{color:#ccc;font-size:0.95rem;}
 
-    /* CORRUPTION GALLERY (no bar) */
-    .corruption-intro{ text-align:center; color: var(--muted); margin-bottom: 1.5rem; }
-    .corr-grid{
-      display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;
-    }
-    .corr-card{
-      background: rgba(0,0,0,.55); border:1px solid rgba(212,175,55,.25);
-      border-radius: 12px; overflow:hidden; transition: .25s; text-align:center;
-    }
-    .corr-card:hover{ transform: translateY(-4px); border-color: var(--pure-gold); box-shadow: 0 12px 28px rgba(212,175,55,.2); }
-    .corr-media{ width:100%; aspect-ratio: 1 / 1; object-fit: cover; display:block; }
-    .corr-body{ padding: .9rem; }
-    .corr-body h4{ color: var(--pure-gold); margin-bottom: .25rem; }
+/* ===== CHARACTERS ===== */
+.characters-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;}
+.character-card{background:#0d0e32;padding:20px;border-radius:10px;text-align:center;transition:.3s;}
+.character-card:hover{transform:translateY(-5px);}
+.character-card h3{margin:10px 0;font-size:1.1rem;color:#9f85ff;}
+.character-card p{color:#ccc;font-size:0.9rem;}
 
-    /* ABILITIES */
-    .abilities-grid{
-      display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;
-    }
-    .ability-card{
-      background: rgba(74,14,78,.18); border: 1px solid var(--corrupt-purple);
-      border-radius: 12px; padding: 1rem; display:flex; gap:.8rem; align-items:flex-start;
-      transition: .25s; position:relative; overflow:hidden;
-    }
-    .ability-card:hover{ transform: translateY(-3px); border-color: var(--corrupt-red); box-shadow: 0 10px 26px rgba(139,0,0,.35); }
-    .ability-icon{ width: 54px; height: 54px; border-radius: 8px; object-fit: cover; border:1px solid rgba(212,175,55,.3); }
-    .ability-title{ color: var(--corrupt-red); margin-bottom: .15rem; }
-    .ability-level{ font-size: .85rem; opacity: .85; margin-bottom:.2rem; color: #e3d5e8; }
+/* ===== CORRUPTION ===== */
+.corr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px;}
+.corr-card{background:#0d0e32;padding:15px;border-radius:10px;transition:.3s;}
+.corr-card:hover{transform:translateY(-5px);}
+.corr-body h4{color:#9f85ff;margin:8px 0;}
+.corr-body p{color:#ccc;font-size:0.9rem;}
 
-    /* DUNGEONS CAROUSEL */
-    .carousel-wrap{
-      position: relative; max-width: 900px; margin: 0 auto;
-    }
-    .carousel-container{
-      overflow: hidden; border-radius: 12px;
-      background: rgba(0,0,0,.6);
-      border: 1px solid rgba(212,175,55,.25);
-    }
-    .carousel-track{
-      display: flex; transition: transform 0.4s ease-in-out;
-    }
-    .dungeon-slide{ min-width: 100%; display: flex; flex-direction: column; }
-    .dungeon-media{ width:100%; aspect-ratio: 3/2; object-fit: cover; display:block; }
-    .dungeon-body{ padding: 1.5rem; border-left: 5px solid var(--pure-gold); }
-    .dungeon-body h3{ color: var(--pure-gold); margin-bottom:.3rem; }
-    .dungeon-level{ color: var(--corrupt-red); font-style: italic; font-size: .9rem; margin-bottom:.5rem; }
-    .carousel-btn{
-      position: absolute; top: 50%; transform: translateY(-50%);
-      background: rgba(212,175,55,.85); border: none; color: #000;
-      width: 48px; height: 48px; border-radius: 50%;
-      font-size: 1.4rem; cursor: pointer; z-index: 10;
-      box-shadow: 0 4px 16px rgba(0,0,0,.4);
-      transition: .2s; display: flex; align-items: center; justify-content: center;
-    }
-    .carousel-btn:hover{ background: var(--pure-gold); transform: translateY(-50%) scale(1.1); }
-    .carousel-btn.prev{ left: -24px; }
-    .carousel-btn.next{ right: -24px; }
-    .carousel-indicators{ display: flex; justify-content: center; gap: .6rem; margin-top: 1.2rem; }
-    .indicator{
-      width: 12px; height: 12px; border-radius: 50%;
-      background: rgba(212,175,55,.3); border: 1px solid rgba(212,175,55,.5);
-      cursor: pointer; transition: .2s;
-    }
-    .indicator.active{ background: var(--pure-gold); transform: scale(1.2); }
+/* ===== ABILITIES ===== */
+.abilities-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:25px;}
+.ability-card{background:#0d0e32;border-left:4px solid #9f85ff;padding:20px;border-radius:10px;
+display:flex;align-items:center;gap:15px;transition:.3s;}
+.ability-card:hover{transform:translateX(5px);}
+.ability-icon{width:55px;height:55px;object-fit:cover;border-radius:8px;}
+.ability-title{font-size:1rem;color:#9f85ff;}
+.ability-level{font-size:.85rem;color:#bbb;}
+.ability-card p{font-size:0.9rem;color:#ccc;}
 
-    /* OOT SECTION - largura inteira */
-    .oot-wrap{ display:flex; flex-direction: column; gap: 1.5rem; }
-    .oot-card{
-      background: rgba(255,255,255,.05); border:1px solid rgba(212,175,55,.25);
-      border-radius: 12px; padding: 1.2rem;
-    }
-    .oot-card h3{ color: var(--pure-gold); margin-bottom: .5rem; }
-    .oot-list{ list-style: none; display:grid; gap: .35rem; color: #e6e2cc; }
-    .oot-iframe-wrap{
-      position: relative; width: 100%; border-radius: 12px; overflow:hidden; border:1px solid rgba(212,175,55,.25);
-      background: #000;
-    }
-    .oot-iframe-aspect{ width:100%; aspect-ratio: 16 / 10; }
-    .oot-iframe{
-      position:absolute; inset:0; width:100%; height:100%; border:0;
-    }
-    .oot-note{ font-size:.9rem; color: var(--muted); margin-top: .6rem; text-align: center; }
+/* ===== DUNGEONS ===== */
+.carousel-wrap{position:relative;overflow:hidden;border-radius:10px;}
+.carousel-track{display:flex;transition:transform .5s ease-in-out;}
+.dungeon-slide{min-width:100%;padding:20px;background:#0d0e32;}
+.dungeon-slide h3{color:#9f85ff;margin:10px 0;}
+.carousel-btn{position:absolute;top:50%;transform:translateY(-50%);
+background:#9f85ff;border:none;color:#fff;width:40px;height:40px;border-radius:50%;
+cursor:pointer;transition:.3s;}
+.carousel-btn.prev{left:10px;}
+.carousel-btn.next{right:10px;}
+.carousel-btn:hover{background:#fff;color:#9f85ff;}
 
-    /* Acordeões da seção OOT */
-    .req {
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(212,175,55,.2);
-      border-radius: 10px;
-      padding: .7rem .9rem;
-      margin-top: .6rem;
-    }
-    .req > summary {
-      cursor: pointer;
-      color: var(--pure-gold);
-      font-weight: 600;
-      list-style: none;
-    }
-    .req > summary::-webkit-details-marker { display: none; }
-    .req > summary::after {
-      content: "▼";
-      float: right;
-      font-size: .85rem;
-      color: rgba(212,175,55,.8);
-      transition: transform .2s;
-    }
-    .req[open] > summary::after { transform: rotate(-180deg); }
-    .req ul { margin-top: .5rem; padding-left: 1.1rem; }
-    .req li { margin: .2rem 0; }
+/* ===== TIMELINE ===== */
+.timeline{position:relative;margin-top:50px;padding-left:20px;border-left:3px solid #9f85ff;}
+.timeline-item{margin-bottom:35px;}
+.timeline-item h3{color:#9f85ff;}
+.timeline-item p{color:#ccc;font-size:0.95rem;}
 
-    /* TIMELINE */
-    .timeline{ position: relative; padding: 2rem 0; }
-    .timeline::before{
-      content:''; position:absolute; left:50%; top:0; bottom:0; width:2px;
-      background: linear-gradient(180deg, var(--pure-green), var(--pure-gold), var(--corrupt-red));
-    }
-    .timeline-item{
-      display:flex; justify-content: space-between; align-items:center; margin: 2.2rem 0; position: relative;
-    }
-    .timeline-content{
-      background: rgba(255,255,255,.05); border:1px solid var(--pure-gold);
-      width: 45%; padding: 1rem; border-radius: 10px;
-    }
-    .timeline-img{ width:100%; aspect-ratio: 3/2; object-fit: cover; border-radius: 8px; margin-bottom:.5rem; }
-    .timeline-dot{
-      position: absolute; left:50%; transform: translateX(-50%); width:20px; height:20px; background: var(--pure-gold);
-      border-radius: 50%; border:3px solid #000; box-shadow: 0 0 18px var(--pure-gold);
-    }
-    .timeline-item:nth-child(odd) .timeline-content{ margin-right: 52%; text-align:right; }
-    .timeline-item:nth-child(even) .timeline-content{ margin-left: 52%; text-align:left; }
+/* ===== ENDINGS ===== */
+#endings{background:#0d0e32;padding:40px;border-radius:10px;}
+#endings h2{color:#9f85ff;margin-bottom:20px;}
+#endings p,#endings li{color:#ccc;font-size:0.95rem;}
 
-    #characters {
-      max-width: 1200px;
-      margin: 0 auto 5rem auto;
-      padding: 0 1rem;
-    }
-    .characters-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr); /* 3 cards na mesma linha no desktop */
-      gap: 1.5rem;
-    }
-    @media (max-width: 960px) {
-      .characters-grid {
-        grid-template-columns: repeat(2, 1fr); /* 2 por linha em tablet */
-      }
-    }
-    @media (max-width: 560px) {
-      .characters-grid {
-        grid-template-columns: 1fr; /* empilha no mobile */
-      }
-    }
-    .character-card {
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(212,175,55,.25);
-      border-radius: 12px;
-      padding: 1rem;
-      transition: .25s;
-    }
-    .character-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--pure-gold);
-      box-shadow: 0 12px 28px rgba(212,175,55,.2);
-    }
-    .character-card h3 {
-      color: var(--pure-gold);
-      margin-bottom: .5rem;
-    }
-    .character-card p {
-      color: #e6e2cc;
-      line-height: 1.4;
-    }
-    .character-card img {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: .5rem;
-    }
+/* ===== FOOTER ===== */
+footer{background:#02021a;padding:50px 10%;text-align:center;color:#888;font-size:0.9rem;
+border-top:1px solid rgba(255,255,255,0.1);}
+footer a{margin:0 8px;}
 
-    /* ENDINGS SECTION */
-    #endings {
-      max-width: 900px;
-      margin: 0 auto 5rem auto;
-      padding: 2rem 1.5rem;
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(212,175,55,.25);
-      border-radius: 12px;
-    }
-    #endings h2 {
-      color: var(--pure-gold);
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-    #endings p {
-      color: #e6e2cc;
-      margin-bottom: 1rem;
-      line-height: 1.5;
-    }
-    #endings ul {
-      list-style: disc inside;
-      color: #e6e2cc;
-      margin-left: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    /* Footer */
-    footer {
-      text-align: center;
-      padding: 2rem 1rem;
-      color: var(--muted);
-      font-size: 0.9rem;
-      border-top: 1px solid rgba(212,175,55,0.2);
-      background: rgba(10,10,10,0.8);
-    }
-    footer .footer-tri {
-      font-size: 2rem;
-      color: var(--pure-gold);
-      margin-bottom: 0.5rem;
-    }
-  </style>
+/* ===== RESPONSIVO ===== */
+@media(max-width:768px){
+#hero h1{font-size:2.4rem;}
+header{flex-direction:column;align-items:flex-start;padding:10px 8%;}
+nav a{margin:0 10px;}
+}
+</style>
 </head>
 <body>
 
-  <header>
-    <nav class="nav">
-      <div class="logo"><span class="tri">▲</span> Shadow Heir</div>
-      <ul>
-        <li><a href="#story">História</a></li>
-        <li><a href="#characters">Personagens</a></li>
-        <li><a href="#corruption">Corrupção</a></li>
-        <li><a href="#abilities">Habilidades</a></li>
-        <li><a href="#dungeons">Masmorras</a></li>
-        <li><a href="#oot">Ocarina</a></li>
-        <li><a href="#timeline">Timeline</a></li>
-        <li><a href="#endings">Finais</a></li>
-      </ul>
-    </nav>
-  </header>
+<header>
+  <h1>Shadow Heir</h1>
+  <nav>
+    <a href="#story">História</a>
+    <a href="#characters">Personagens</a>
+    <a href="#corruption">Corrupção</a>
+    <a href="#abilities">Habilidades</a>
+    <a href="#dungeons">Masmorras</a>
+    <a href="#timeline">Timeline</a>
+    <a href="#endings">Finais</a>
+  </nav>
+</header>
 
-  <!-- HERO: Before / After Slider -->
-  <div class="hero-wrap" id="hero">
-    <!-- BEFORE (Pure) -->
-    <div class="hero-layer">
-      <picture>
-        <img class="hero-img" src="./images/ambient/pure-kingdom.png" alt="Metade pura: Hyrule vibrante com Link heróico"/>
-      </picture>
-    </div>
-    <!-- AFTER (Corrupt) -->
-    <div class="hero-layer after-clip" id="afterLayer">
-      <picture>
-        <img class="hero-img" src="./images/ambient/corrupted-kingdom.png" alt="Metade corrompida: fissuras magenta e céu escuro"/>
-      </picture>
-    </div>
+<section id="hero">
+  <h1>The Legend of Zelda: Shadow Heir</h1>
+  <p>Após derrotar Ganon, um fragmento da essência do mal desperta em Link.  
+  Suas escolhas determinarão se ele permanecerá o herói de Hyrule — ou se tornará seu maior pesadelo.</p>
+  <a href="#story" class="btn">Descubra a História</a>
+</section>
 
-    <div class="hero-overlay"></div>
-
-    <div class="slider-handle" id="sliderHandle" title="Arraste para comparar"></div>
-
-    <div class="hero-content">
-      <div class="hero-inner">
-        <h1>The Legend of Zelda: Shadow Heir</h1>
-        <div class="subtitle">Uma jornada entre luz e trevas</div>
-        <p class="tagline">
-          Após derrotar Ganon, um fragmento da essência do mal desperta em Link. Suas escolhas determinarão
-          se ele permanecerá o herói de Hyrule — ou se tornará seu maior pesadelo.
-        </p>
-        <a class="cta" href="#story">Descubra a História</a>
-      </div>
-    </div>
+<!-- ===== STORY ===== -->
+<section id="story">
+  <h2 class="section-title">A Maldição Desperta</h2>
+  <div class="story-grid">
+    <article class="story-card">
+      <img src="./images/ambient/master-sword.png" alt="Link criança com brilho dourado">
+      <h3>Premissa</h3>
+      <p>Seis meses após retornar à infância, Link descobre que um fragmento de Ganon foi implantado em sua alma.</p>
+    </article>
+    <article class="story-card">
+      <img src="./images/characters/koume-kotake-1.png" alt="Ritual sombrios">
+      <h3>Conflito</h3>
+      <p>Koume e Kotake realizam rituais sombrios para transformar Link no hospedeiro perfeito de Ganon.</p>
+    </article>
+    <article class="story-card">
+      <img src="./images/characters/corruption-avatar.png" alt="Templo dos Espíritos">
+      <h3>Jornada</h3>
+      <p>Decisões morais e uso de poderes sombrios alteram aparência, mundo e relações com NPCs.</p>
+    </article>
   </div>
+</section>
 
-  <!-- STORY -->
-  <section id="story">
-    <h2>A Maldição Desperta</h2>
-    <div class="story-grid">
-      <article class="story-card">
-        <img class="story-media" loading="lazy" src="./images/ambient/master-sword.png" alt="Link criança em Kokiri com brilho dourado nos olhos"/>
-        <div class="story-body">
-          <h3>Premissa</h3>
-          <p>Seis meses após retornar à infância, Link descobre que um fragmento de Ganon foi implantado em sua alma.
-            Sem a Master Sword para contê-lo, a maldição desperta e o corrói por dentro.</p>
-        </div>
-      </article>
-      <article class="story-card">
-        <img class="story-media" loading="lazy" src="./images/characters/koume-kotake-1.png" alt="Koume e Kotake em ritual com criaturas das trevas"/>
-        <div class="story-body">
-          <h3>Conflito</h3>
-          <p>Koume e Kotake realizam rituais sombrios para transformar Link no hospedeiro perfeito de Ganon,
-            espalhando corrupção por Hyrule.</p>
-        </div>
-      </article>
-      <article class="story-card">
-        <img class="story-media" loading="lazy" src="./images/characters/corruption-avatar.png" alt="Link diante do Templo dos Espíritos com atmosfera psicológica"/>
-        <div class="story-body">
-          <h3>Jornada</h3>
-          <p>Decisões morais e uso (ou recusa) de poderes sombrios alteram aparência, música, mundo e relações com NPCs,
-            culminando no Templo dos Espíritos e no confronto com o Avatar da Corrupção.</p>
-        </div>
-      </article>
-    </div>
-  </section>
+<!-- ===== CHARACTERS ===== -->
+<section id="characters">
+  <h2 class="section-title">Personagens</h2>
+  <div class="characters-grid">
+    <article class="character-card">
+      <img src="./images/characters/link.png" alt="Link criança">
+      <h3>Link</h3>
+      <p>Protagonista que enfrenta uma maldição oculta. Sua aparência e habilidades mudam conforme suas escolhas morais.</p>
+    </article>
+    <article class="character-card">
+      <img src="./images/characters/koume-kotake-2.png" alt="Koume e Kotake">
+      <h3>Koume e Kotake</h3>
+      <p>Bruxas Gerudo que descobrem a maldição e buscam transformar Link no hospedeiro perfeito.</p>
+    </article>
+    <article class="character-card">
+      <img src="./images/characters/corruption-avatar.png" alt="Avatar da Corrupção">
+      <h3>Avatar da Corrupção</h3>
+      <p>Manifestação física da essência corrompida de Ganon dentro de Link.</p>
+    </article>
+  </div>
+</section>
 
-  <!-- CHARACTERS -->
-  <section id="characters">
-    <h2>Personagens Principais</h2>
-    <div class="characters-grid">
-      <article class="character-card">
-        <img src="./images/characters/link.png" alt="Link criança com aura sutil de corrupção"/>
-        <h3>Link</h3>
-        <p>Protagonista que enfrenta uma maldição oculta. Sua aparência e habilidades mudam conforme suas escolhas morais, refletindo a luta interna entre pureza e corrupção.</p>
-      </article>
-      <article class="character-card">
-        <img src="./images/characters/koume-kotake-2.png" alt="Koume e Kotake voando em vassouras"/>
-        <h3>Koume e Kotake</h3>
-        <p>Bruxas Gerudo que descobrem a maldição e buscam transformar Link no hospedeiro perfeito de Ganon, espalhando corrupção por Hyrule.</p>
-      </article>
-      <article class="character-card">
-        <img src="./images/characters/corruption-avatar.png" alt="Avatar da Corrupção"/>
-        <h3>Avatar da Corrupção</h3>
-        <p>Manifestação física da essência corrompida de Ganon dentro de Link, o chefe final que representa o ápice da maldição.</p>
-      </article>
-    </div>
-  </section>
+<!-- ===== CORRUPTION ===== -->
+<section id="corruption">
+  <h2 class="section-title">Corrupção: Quatro Estágios</h2>
+  <div class="corr-grid">
+    <figure class="corr-card">
+      <img src="./images/characters/link.png" alt="Pureza">
+      <figcaption class="corr-body"><h4>Pureza</h4><p>Mundo vibrante e mecânicas clássicas.</p></figcaption>
+    </figure>
+    <figure class="corr-card">
+      <img src="./images/characters/tranformations/second-form.png" alt="Despertar">
+      <figcaption class="corr-body"><h4>Despertar</h4><p>Olhos dourados e distorções sutis.</p></figcaption>
+    </figure>
+    <figure class="corr-card">
+      <img src="./images/characters/tranformations/third-form.png" alt="Transformação">
+      <figcaption class="corr-body"><h4>Transformação</h4><p>Lojas caras e músicas distorcidas.</p></figcaption>
+    </figure>
+    <figure class="corr-card">
+      <img src="./images/characters/tranformations/final-form.png" alt="Abismo">
+      <figcaption class="corr-body"><h4>Abismo</h4><p>Hostilidade geral e céu avermelhado.</p></figcaption>
+    </figure>
+  </div>
+</section>
 
-  <!-- CORRUPTION (gallery instead of bar) -->
-  <section id="corruption">
-    <h2>Corrupção: Quatro Estágios</h2>
-    <div class="corr-grid">
-      <figure class="corr-card">
-        <img class="corr-media" loading="lazy" src="./images/characters/link.png" alt="Pureza: Link normal, Hyrule vibrante"/>
-        <figcaption class="corr-body">
-          <h4>Pureza</h4>
-          <p>Mundo vibrante, NPCs acolhedores, mecânicas clássicas.</p>
-        </figcaption>
-      </figure>
-      <figure class="corr-card">
-        <img class="corr-media" loading="lazy" src="./images/characters/tranformations/second-form.png" alt="Despertar: olhos dourados, distorções sutis"/>
-        <figcaption class="corr-body">
-          <h4>Despertar</h4>
-          <p>Olhos dourados, leve aumento de dano, desconfiança crescente.</p>
-        </figcaption>
-      </figure>
-      <figure class="corr-card">
-        <img class="corr-media" loading="lazy" src="./images/characters/tranformations/third-form.png" alt="Transformação: cabelo com tons Gerudo, acordeão sombrio"/>
-        <figcaption class="corr-body">
-          <h4>Transformação</h4>
-          <p>Cabelo com tons Gerudo, lojas caras, músicas distorcidas.</p>
-        </figcaption>
-      </figure>
-      <figure class="corr-card">
-        <img class="corr-media" loading="lazy" src="./images/characters/tranformations/final-form.png" alt="Abismo: pele acinzentada, céu vermelho, aura púrpura"/>
-        <figcaption class="corr-body">
-          <h4>Abismo</h4>
-          <p>Hostilidade geral, céu vermelho, arsenal sombrio completo.</p>
-        </figcaption>
-      </figure>
-    </div>
-  </section>
+<!-- ===== ABILITIES ===== -->
+<section id="abilities">
+  <h2 class="section-title">Habilidades Sombrias</h2>
+  <div class="abilities-grid">
+    <article class="ability-card">
+      <img class="ability-icon" src="./images/abilities/shadow-stab.png" alt="Golpe Sombrio">
+      <div><h3 class="ability-title">Golpe Sombrio</h3><p>Ataque carregado que causa dano extra e quebra defesas.</p></div>
+    </article>
+    <article class="ability-card">
+      <img class="ability-icon" src="./images/abilities/skadu-portal.png" alt="Portal Sombrio">
+      <div><h3 class="ability-title">Portal Sombrio</h3><p>Cria atalhos por áreas corrompidas.</p></div>
+    </article>
+    <article class="ability-card">
+      <img class="ability-icon" src="./images/abilities/lifesteal.png" alt="Absorção Vital">
+      <div><h3 class="ability-title">Absorção Vital</h3><p>Recupera vida ao derrotar inimigos.</p></div>
+    </article>
+    <article class="ability-card">
+      <img class="ability-icon" src="./images/abilities/shadow-form.png" alt="Forma Sombria">
+      <div><h3 class="ability-title">Forma Sombria</h3><p>Aumenta velocidade e dano temporariamente.</p></div>
+    </article>
+  </div>
+</section>
 
-  <!-- ABILITIES -->
-  <section id="abilities">
-    <h2>Habilidades Sombrias</h2>
-    <div class="abilities-grid">
-      <article class="ability-card">
-        <img class="ability-icon" loading="lazy" src="./images/abilities/shadow-stab.png" alt="Ícone: Golpe Sombrio"/>
-        <div>
-          <div class="ability-level">Nível 1 (21–40%)</div>
-          <h3 class="ability-title">Golpe Sombrio</h3>
-          <p>Ataque carregado que causa 1.2x de dano e quebra defesas.</p>
-        </div>
-      </article>
-      <article class="ability-card">
-        <img class="ability-icon" loading="lazy" src="./images/abilities/skadu-portal.png" alt="Ícone: Portal Sombrio"/>
-        <div>
-          <div class="ability-level">Nível 2 (41–60%)</div>
-          <h3 class="ability-title">Portal Sombrio</h3>
-          <p>Cria atalhos por áreas corrompidas para exploração criativa.</p>
-        </div>
-      </article>
-      <article class="ability-card">
-        <img class="ability-icon" loading="lazy" src="./images/abilities/lifesteal.png" alt="Ícone: Absorção Vital"/>
-        <div>
-          <div class="ability-level">Nível 3 (61–80%)</div>
-          <h3 class="ability-title">Absorção Vital</h3>
-          <p>Recupera vida ao derrotar inimigos, aumentando a sustentação.</p>
-        </div>
-      </article>
-      <article class="ability-card">
-        <img class="ability-icon" loading="lazy" src="./images/abilities/shadow-form.png" alt="Ícone: Forma Sombria"/>
-        <div>
-          <div class="ability-level">Nível 4 (81–100%)</div>
-          <h3 class="ability-title">Forma Sombria</h3>
-          <p>Transformação que aumenta velocidade, dano e defesa.</p>
-        </div>
-      </article>
-      <article class="ability-card">
-        <img class="ability-icon" loading="lazy" src="./images/abilities/ganon-sword.png" alt="Ícone: Lâmina de Ganon"/>
-        <div>
-          <div class="ability-level">Nível 4 (90–100%)</div>
-          <h3 class="ability-title">Lâmina de Ganon</h3>
-          <p>Golpe devastador com 2x de dano: o ápice do poder sombrio.</p>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- DUNGEONS CAROUSEL -->
-  <section id="dungeons">
-    <h2>As Cinco Masmorras</h2>
-    <div class="carousel-wrap">
-      <div class="carousel-container">
-        <div class="carousel-track" id="carouselTrack">
-          <!-- Slide 1 -->
-          <article class="dungeon-slide">
-            <img class="dungeon-media" loading="lazy" src="./images/dungeons/shadow-woods.png" alt="Floresta Sombria: árvores murchas e luz filtrada"/>
-            <div class="dungeon-body">
-              <h3>Floresta Sombria</h3>
-              <p>Puzzles de luz e sombra; Boss: espírito da floresta corrompido.</p>
-            </div>
-          </article>
-          <!-- Slide 2 -->
-          <article class="dungeon-slide">
-            <img class="dungeon-media" loading="lazy" src="./images/dungeons/cave-of-sorrows.png" alt="Caverna dos Lamentos: câmara rochosa espectral"/>
-            <div class="dungeon-body">
-              <h3>Caverna dos Lamentos</h3>
-              <p>Melodias acalmam espíritos; Boss: Goron corrompido.</p>
-            </div>
-          </article>
-          <!-- Slide 3 -->
-          <article class="dungeon-slide">
-            <img class="dungeon-media" loading="lazy" src="./images/dungeons/cloudy-lake.png" alt="Lago Turvo: águas enegrecidas no Domínio Zora"/>
-            <div class="dungeon-body">
-              <h3>Lago Turvo</h3>
-              <p>Purificar fontes em águas venenosas; Boss: entidade aquática gigante.</p>
-            </div>
-          </article>
-          <!-- Slide 4 -->
-          <article class="dungeon-slide">
-            <img class="dungeon-media" loading="lazy" src="./images/dungeons/gerudo-fortress.png" alt="Fortaleza Gerudo corrompida com portais sombrios"/>
-            <div class="dungeon-body">
-              <h3>Fortaleza Gerudo Corrompida</h3>
-              <p>Stealth e portais; Boss: Koume & Kotake.</p>
-            </div>
-          </article>
-          <!-- Slide 5 -->
-          <article class="dungeon-slide">
-            <img class="dungeon-media" loading="lazy" src="./images/dungeons/spirit-temple.png" alt="Templo dos Espíritos: interior com ilusões"/>
-            <div class="dungeon-body">
-              <h3>Templo dos Espíritos</h3>
-              <p>Labirinto psicológico; Boss final: Avatar da Corrupção. O desfecho determina o destino de Hyrule.</p>
-            </div>
-          </article>
-        </div>
+<!-- ===== DUNGEONS ===== -->
+<section id="dungeons">
+  <h2 class="section-title">As Cinco Masmorras</h2>
+  <div class="carousel-wrap">
+    <div class="carousel-track" id="track">
+      <div class="dungeon-slide">
+        <img src="./images/dungeons/shadow-woods.png" alt="">
+        <h3>Floresta Sombria</h3><p>Puzzles de luz e sombra; Boss: espírito corrompido.</p>
       </div>
-      <button class="carousel-btn prev" id="prevBtn" aria-label="Anterior">‹</button>
-      <button class="carousel-btn next" id="nextBtn" aria-label="Próximo">›</button>
-      <div class="carousel-indicators" id="indicators"></div>
-    </div>
-  </section>
-
-  <!-- OCARINA OF TIME SECTION -->
-  <section id="oot">
-    <h2>Ocarina of Time — Referência do Jogo Original</h2>
-
-    <div class="oot-wrap">
-      <!-- Dados do jogo original -->
-      <article class="oot-card">
-        <h3>Jogo Original</h3>
-        <ul class="oot-list">
-          <li><strong>Nome do Jogo:</strong> The Legend of Zelda: Ocarina of Time</li>
-          <li><strong>Ano de Lançamento:</strong> 1998</li>
-          <li><strong>Plataforma:</strong> Nintendo 64</li>
-          <li><strong>Gênero:</strong> Ação-aventura 3D</li>
-          <li><strong>Estúdio:</strong> Nintendo EAD</li>
-          <li><strong>Principais mecânicas:</strong> Z-Targeting, ações contextuais, dungeons 3D com puzzles, viagem temporal (criança/adulto)</li>
-          <li><strong>Inovações:</strong> Combate 3D fluido, design de níveis em 3D, narrativa cinematográfica</li>
-        </ul>
-      </article>
-
-      <!-- Checklist da atividade -->
-      <article class="oot-card">
-        <h3>Como nossa continuação atende à atividade</h3>
-
-        <details class="req" open>
-          <summary>Objetivos para a Continuação</summary>
-          <ul>
-            <li>Expandir o universo com a "corrupção" pós-ganon</li>
-            <li>Adicionar novas mecânicas (poderes sombrios, escolhas morais)</li>
-            <li>Aprofundar a narrativa (consequências psicológicas para Link)</li>
-          </ul>
-        </details>
-
-        <details class="req">
-          <summary>Personagens</summary>
-          <ul>
-            <li><strong>Protagonista:</strong> Link criança; evolução visual e mecânica conforme as escolhas</li>
-            <li><strong>Antagonistas:</strong> Link corrompido como o Avatar da Corrupção. Koume e Kotake podem ser enquadrados como vilãs secundárias</li>
-          </ul>
-        </details>
-
-        <details class="req">
-          <summary>História e Ambiente</summary>
-          <ul>
-            <li>Pós-final de OOT (Link retorna à infância)</li>
-            <li>Conflito: fragmento de Ganon desperta dentro de Link</li>
-            <li>Novos locais e variações corrompidas dos cenários de Hyrule</li>
-          </ul>
-        </details>
-
-        <details class="req">
-          <summary>Mecânicas de Jogo</summary>
-          <ul>
-            <li>Mantém: exploração, dungeons, combate base de Ocarina of Time</li>
-            <li>Introduz: poderes sombrios, dilemas, efeitos no mundo/NPCs</li>
-          </ul>
-        </details>
-
-        <details class="req">
-          <summary>Estética e Trilha Sonora</summary>
-          <ul>
-            <li>Estilo N64 respeitado; variações visuais conforme corrupção</li>
-            <li>Trilha com camadas "puras" e "sombrias" que mudam com o estado</li>
-          </ul>
-        </details>
-
-        <details class="req">
-          <summary>Inovações e Novidades</summary>
-          <ul>
-            <li>Interpretação de estado de corrupção do personagem por feedback visual e barra no HUD de vida</li>
-            <li>Dungeons com soluções alternativas via poderes sombrios</li>
-          </ul>
-        </details>
-
-        <details class="req">
-          <summary>Conexões com o Jogo Original</summary>
-          <ul>
-            <li>Respeita o cânone: período entre Ocarina of Time e Majora's Mask</li>
-            <li>Referências a locais, itens e personagens do Ocarina of Time</li>
-          </ul>
-        </details>
-      </article>
-
-      <!-- Iframe largura inteira (sem sandbox; fullscreen permitido) -->
-      <div class="oot-iframe-wrap">
-        <div class="oot-iframe-aspect"></div>
-        <iframe
-          id="ootFrame"
-          class="oot-iframe"
-          loading="lazy"
-          src="https://gam.onl/n64/legend-of-zelda-ocarina-of-time.html#legend-of-zelda-ocarina-of-time"
-          title="Jogar The Legend of Zelda: Ocarina of Time no navegador"
-          allowfullscreen
-          allow="fullscreen; autoplay; encrypted-media; gamepad; xr-spatial-tracking"
-          referrerpolicy="no-referrer"
-        ></iframe>
+      <div class="dungeon-slide">
+        <img src="./images/dungeons/cave-of-sorrows.png" alt="">
+        <h3>Caverna dos Lamentos</h3><p>Ritmos e melodias para acalmar espíritos.</p>
       </div>
-      <p class="oot-note">
-        Conteúdo incorporado de terceiros — preferir abrir em nova aba se desejar tela cheia direta:
-        <a href="https://gam.onl/n64/legend-of-zelda-ocarina-of-time.html#legend-of-zelda-ocarina-of-time" target="_blank" rel="noopener">Abrir aqui</a>.
-      </p>
-    </div>
-  </section>
-
-  <!-- TIMELINE -->
-  <section id="timeline">
-    <h2>Linha do Tempo Canônica</h2>
-    <div class="timeline">
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <img class="timeline-img" loading="lazy" src="./images/ambient/master-sword.png" alt="Master Sword no pedestal no Templo do Tempo"/>
-          <h3>1998 — Ocarina of Time</h3>
-          <p>Link derrota Ganon e retorna à infância. A Master Sword é selada no Templo do Tempo.</p>
-        </div>
-        <div class="timeline-dot"></div>
+      <div class="dungeon-slide">
+        <img src="./images/dungeons/cloudy-lake.png" alt="">
+        <h3>Lago Turvo</h3><p>Purifique as águas venenosas; Boss: entidade aquática.</p>
       </div>
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <img class="timeline-img" loading="lazy" src="./images/ambient/world-colision.png" alt="Link parcialmente corrompido em Hyrule"/>
-          <h3>1999 — Shadow Heir</h3>
-          <p>Seis meses depois, a maldição desperta. Link enfrenta a corrupção e as bruxas Gerudo.</p>
-        </div>
-        <div class="timeline-dot"></div>
+      <div class="dungeon-slide">
+        <img src="./images/dungeons/gerudo-fortress.png" alt="">
+        <h3>Fortaleza Gerudo Corrompida</h3><p>Stealth e portais; Boss: Koume & Kotake.</p>
       </div>
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <img class="timeline-img" loading="lazy" src="./images/ambient/majora-clock-town.png" alt="Máscara de Majora estilizada em primeiro plano"/>
-          <h3>2000 — Majora's Mask</h3>
-          <p>Final canônico: Link purifica a maldição e parte em busca de Navi, iniciando uma nova jornada.</p>
-        </div>
-        <div class="timeline-dot"></div>
+      <div class="dungeon-slide">
+        <img src="./images/dungeons/spirit-temple.png" alt="">
+        <h3>Templo dos Espíritos</h3><p>Labirinto psicológico; Boss final: Avatar da Corrupção.</p>
       </div>
     </div>
-  </section>
+    <button class="carousel-btn prev" id="prev">‹</button>
+    <button class="carousel-btn next" id="next">›</button>
+  </div>
+</section>
 
-  <!-- ENDINGS -->
-  <section id="endings">
-    <h2>Finais Múltiplos</h2>
-    <p>O destino de Link depende das escolhas do jogador e do nível de corrupção acumulado durante a jornada.</p>
-    <ul>
-      <li><strong>Final Canônico (Pureza):</strong> Link purifica a maldição, renuncia temporariamente à Triforce da Coragem e parte em busca de Navi, conectando-se com Majora's Mask.</li>
-      <li><strong>Final Alternativo (Corrupção):</strong> Link abraça a essência de Ganon, tornando-se o Herdeiro das Sombras e uma nova ameaça para Hyrule.</li>
-    </ul>
-  </section>
+<!-- ===== TIMELINE ===== -->
+<section id="timeline">
+  <h2 class="section-title">Linha do Tempo</h2>
+  <div class="timeline">
+    <div class="timeline-item"><h3>1998 — Ocarina of Time</h3><p>Link derrota Ganon e retorna à infância.</p></div>
+    <div class="timeline-item"><h3>1999 — Shadow Heir</h3><p>A maldição desperta; Link luta contra si mesmo.</p></div>
+    <div class="timeline-item"><h3>2000 — Majora’s Mask</h3><p>Link purifica a alma e parte em busca de Navi.</p></div>
+  </div>
+</section>
 
-  <footer>
-    <div class="footer-tri">▲</div>
-    <p><strong>The Legend of Zelda: Shadow Heir</strong></p>
-    <p style="margin-top:.3rem;">The Legend of Zelda é propriedade da Nintendo.</p>
-  </footer>
+<!-- ===== ENDINGS ===== -->
+<section id="endings">
+  <h2>Finais</h2>
+  <p>O destino de Link depende de suas ações e do nível de corrupção acumulado.</p>
+  <ul>
+    <li><strong>Pureza:</strong> Link purifica a maldição e salva Hyrule.</li>
+    <li><strong>Corrupção:</strong> Link abraça o poder e se torna o Herdeiro das Sombras.</li>
+  </ul>
+</section>
 
-  <script>
-    // BEFORE/AFTER SLIDER (Hero)
-    (function(){
-      const wrap = document.getElementById('hero');
-      const afterLayer = document.getElementById('afterLayer');
-      const handle = document.getElementById('sliderHandle');
-      let dragging = false;
+<footer>
+  <p>© 2025 — The Legend of Zelda: Shadow Heir (Fan Concept)</p>
+</footer>
 
-      function setPosition(clientX){
-        const rect = wrap.getBoundingClientRect();
-        let x = Math.max(rect.left, Math.min(clientX, rect.right));
-        const percent = ((x - rect.left) / rect.width) * 100;
-        afterLayer.style.width = percent + '%';
-        handle.style.left = `calc(${percent}% - 18px)`;
-      }
+<script>
+// Navegação suave
+document.querySelectorAll('a[href^="#"]').forEach(link=>{
+  link.addEventListener('click',e=>{
+    e.preventDefault();
+    const el=document.querySelector(link.getAttribute('href'));
+    if(el){ window.scrollTo({top:el.offsetTop-70,behavior:'smooth'}); }
+  });
+});
 
-      handle.addEventListener('mousedown', ()=> dragging = true);
-      window.addEventListener('mouseup', ()=> dragging = false);
-      window.addEventListener('mousemove', (e)=> { if(dragging) setPosition(e.clientX); });
-
-      // Touch
-      handle.addEventListener('touchstart', ()=> dragging = true, {passive:true});
-      window.addEventListener('touchend', ()=> dragging = false, {passive:true});
-      window.addEventListener('touchmove', (e)=> { if(dragging) setPosition(e.touches[0].clientX); }, {passive:true});
-
-      // Click to set
-      wrap.addEventListener('click', (e)=> setPosition(e.clientX));
-    })();
-
-    // DUNGEONS CAROUSEL
-    (function(){
-      const track = document.getElementById('carouselTrack');
-      const prevBtn = document.getElementById('prevBtn');
-      const nextBtn = document.getElementById('nextBtn');
-      const indicatorsWrap = document.getElementById('indicators');
-      const slides = track.querySelectorAll('.dungeon-slide');
-      const total = slides.length;
-      let current = 0;
-
-      // Create indicators
-      for(let i = 0; i < total; i++){
-        const dot = document.createElement('div');
-        dot.classList.add('indicator');
-        if(i === 0) dot.classList.add('active');
-        dot.addEventListener('click', ()=> goTo(i));
-        indicatorsWrap.appendChild(dot);
-      }
-      const indicators = indicatorsWrap.querySelectorAll('.indicator');
-
-      function update(){
-        track.style.transform = `translateX(-${current * 100}%)`;
-        indicators.forEach((dot, i)=> dot.classList.toggle('active', i === current));
-      }
-
-      function goTo(index){
-        current = index;
-        update();
-      }
-
-      prevBtn.addEventListener('click', ()=> {
-        current = (current - 1 + total) % total;
-        update();
-      });
-
-      nextBtn.addEventListener('click', ()=> {
-        current = (current + 1) % total;
-        update();
-      });
-
-      // Keyboard navigation
-      document.addEventListener('keydown', (e)=> {
-        if(e.key === 'ArrowLeft') prevBtn.click();
-        if(e.key === 'ArrowRight') nextBtn.click();
-      });
-    })();
-  </script>
+// Carrossel simples
+const track=document.getElementById('track'),
+prev=document.getElementById('prev'),
+next=document.getElementById('next');
+let index=0;
+next.onclick=()=>{index=(index+1)%5;track.style.transform=`translateX(-${index*100}%)`;};
+prev.onclick=()=>{index=(index+4)%5;track.style.transform=`translateX(-${index*100}%)`;};
+</script>
 </body>
 </html>
