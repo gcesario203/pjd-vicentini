@@ -6,98 +6,292 @@
 <title>The Legend of Zelda: Shadow Heir</title>
 <style>
 /* ===== BASE GLOBAL ===== */
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{background:#04041b;color:#fff;line-height:1.6;overflow-x:hidden;}
+body{
+  background:#04041b;
+  color:#fff;
+  line-height:1.6;
+  overflow-x:hidden;
+  font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+}
 a{text-decoration:none;color:inherit;transition:.3s;}
 a:hover{color:#9f85ff;}
-section{padding:80px 10%;max-width:1400px;margin:auto;}
-img{max-width:100%;display:block;border-radius:10px;}
+section{padding:60px 5%;max-width:1400px;margin:auto;}
+img{max-width:100%;height:auto;display:block;border-radius:10px;}
 
 /* ===== HEADER ===== */
-header{position:fixed;top:0;width:100%;background:rgba(4,4,27,.85);backdrop-filter:blur(8px);
-display:flex;justify-content:space-between;align-items:center;padding:18px 10%;z-index:1000;
-border-bottom:1px solid rgba(255,255,255,0.1);}
-header h1{font-weight:700;letter-spacing:2px;}
-nav a{margin-left:25px;font-size:0.95rem;}
-nav a:hover{color:#9f85ff;}
+header{
+  position:fixed;top:0;width:100%;
+  background:rgba(4,4,27,.9);
+  backdrop-filter:blur(8px);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 5%;
+  z-index:1000;
+  border-bottom:1px solid rgba(255,255,255,0.1);
+  flex-wrap:wrap;
+}
+header h1{font-weight:700;letter-spacing:2px;font-size:1.3rem;}
+nav{display:flex;flex-wrap:wrap;gap:15px;margin-top:5px;}
+nav a{font-size:0.9rem;padding:5px 10px;border-radius:5px;}
+nav a:hover{background:rgba(159,133,255,0.2);}
 
 /* ===== HERO ===== */
-#hero{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
-text-align:center;background:linear-gradient(rgba(10,10,30,0.6),rgba(4,4,27,0.8)),
-url('./images/ambient/pure-kingdom.png') center/cover no-repeat;}
-#hero h1{font-size:3.5rem;font-weight:800;margin-bottom:10px;}
-#hero p{max-width:700px;color:#ccc;margin-bottom:30px;}
-.btn{display:inline-block;border:2px solid #fff;padding:10px 25px;border-radius:50px;font-weight:500;}
+#hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:100px 5% 60px;
+  background:linear-gradient(rgba(10,10,30,0.6),rgba(4,4,27,0.8)),
+  url('./images/ambient/pure-kingdom.png') center/cover no-repeat;
+}
+#hero h1{
+  font-size:clamp(2rem,8vw,3.5rem);
+  font-weight:800;
+  margin-bottom:15px;
+  line-height:1.2;
+}
+#hero p{
+  max-width:700px;
+  color:#ccc;
+  margin-bottom:30px;
+  font-size:clamp(0.9rem,2.5vw,1.1rem);
+  padding:0 10px;
+}
+.btn{
+  display:inline-block;
+  border:2px solid #fff;
+  padding:12px 28px;
+  border-radius:50px;
+  font-weight:500;
+  font-size:clamp(0.85rem,2vw,1rem);
+}
 .btn:hover{background:#fff;color:#04041b;}
 
 /* ===== GENERIC TITLES ===== */
-.section-title{font-size:2rem;margin-bottom:50px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.section-title{
+  font-size:clamp(1.5rem,5vw,2rem);
+  margin-bottom:40px;
+  font-weight:700;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  text-align:center;
+}
 
 /* ===== STORY ===== */
-.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:25px;}
-.story-card{background:#0d0e32;padding:20px;border-radius:10px;transition:.3s;}
+.story-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:20px;
+}
+.story-card{
+  background:#0d0e32;
+  padding:20px;
+  border-radius:10px;
+  transition:.3s;
+}
 .story-card:hover{transform:translateY(-5px);}
-.story-card h3{margin:10px 0;font-size:1.2rem;color:#9f85ff;}
-.story-card p{color:#ccc;font-size:0.95rem;}
+.story-card h3{margin:10px 0;font-size:clamp(1rem,3vw,1.2rem);color:#9f85ff;}
+.story-card p{color:#ccc;font-size:clamp(0.85rem,2vw,0.95rem);}
 
 /* ===== CHARACTERS ===== */
-.characters-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;}
-.character-card{background:#0d0e32;padding:20px;border-radius:10px;text-align:center;transition:.3s;}
+.characters-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;
+}
+.character-card{
+  background:#0d0e32;
+  padding:20px;
+  border-radius:10px;
+  text-align:center;
+  transition:.3s;
+}
 .character-card:hover{transform:translateY(-5px);}
-.character-card h3{margin:10px 0;font-size:1.1rem;color:#9f85ff;}
-.character-card p{color:#ccc;font-size:0.9rem;}
+.character-card h3{margin:10px 0;font-size:clamp(1rem,3vw,1.1rem);color:#9f85ff;}
+.character-card p{color:#ccc;font-size:clamp(0.85rem,2vw,0.9rem);}
 
 /* ===== CORRUPTION ===== */
-.corr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px;}
-.corr-card{background:#0d0e32;padding:15px;border-radius:10px;transition:.3s;}
+.corr-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:20px;
+}
+.corr-card{
+  background:#0d0e32;
+  padding:15px;
+  border-radius:10px;
+  transition:.3s;
+}
 .corr-card:hover{transform:translateY(-5px);}
-.corr-body h4{color:#9f85ff;margin:8px 0;}
-.corr-body p{color:#ccc;font-size:0.9rem;}
+.corr-body h4{color:#9f85ff;margin:8px 0;font-size:clamp(0.95rem,2.5vw,1.1rem);}
+.corr-body p{color:#ccc;font-size:clamp(0.8rem,2vw,0.9rem);}
 
 /* ===== ABILITIES ===== */
-.abilities-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:25px;}
-.ability-card{background:#0d0e32;border-left:4px solid #9f85ff;padding:20px;border-radius:10px;
-display:flex;align-items:center;gap:15px;transition:.3s;}
+.abilities-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+}
+.ability-card{
+  background:#0d0e32;
+  border-left:4px solid #9f85ff;
+  padding:20px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  transition:.3s;
+}
 .ability-card:hover{transform:translateX(5px);}
-.ability-icon{width:55px;height:55px;object-fit:cover;border-radius:8px;}
-.ability-title{font-size:1rem;color:#9f85ff;}
-.ability-level{font-size:.85rem;color:#bbb;}
-.ability-card p{font-size:0.9rem;color:#ccc;}
+.ability-icon{
+  width:55px;
+  height:55px;
+  min-width:55px;
+  object-fit:cover;
+  border-radius:8px;
+}
+.ability-title{font-size:clamp(0.9rem,2.5vw,1rem);color:#9f85ff;}
+.ability-level{font-size:clamp(0.75rem,2vw,0.85rem);color:#bbb;}
+.ability-card p{font-size:clamp(0.8rem,2vw,0.9rem);color:#ccc;}
 
 /* ===== DUNGEONS ===== */
-.carousel-wrap{position:relative;overflow:hidden;border-radius:10px;}
-.carousel-track{display:flex;transition:transform .5s ease-in-out;}
-.dungeon-slide{min-width:100%;padding:20px;background:#0d0e32;}
-.dungeon-slide h3{color:#9f85ff;margin:10px 0;}
-.carousel-btn{position:absolute;top:50%;transform:translateY(-50%);
-background:#9f85ff;border:none;color:#fff;width:40px;height:40px;border-radius:50%;
-cursor:pointer;transition:.3s;}
+.carousel-wrap{
+  position:relative;
+  overflow:hidden;
+  border-radius:10px;
+  max-width:900px;
+  margin:0 auto;
+}
+.carousel-track{
+  display:flex;
+  transition:transform .5s ease-in-out;
+}
+.dungeon-slide{
+  min-width:100%;
+  padding:20px;
+  background:#0d0e32;
+}
+.dungeon-slide h3{
+  color:#9f85ff;
+  margin:10px 0;
+  font-size:clamp(1rem,3vw,1.3rem);
+}
+.dungeon-slide p{
+  font-size:clamp(0.85rem,2vw,0.95rem);
+  color:#ccc;
+}
+.carousel-btn{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  background:#9f85ff;
+  border:none;
+  color:#fff;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  cursor:pointer;
+  transition:.3s;
+  font-size:1.5rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
 .carousel-btn.prev{left:10px;}
 .carousel-btn.next{right:10px;}
 .carousel-btn:hover{background:#fff;color:#9f85ff;}
 
 /* ===== TIMELINE ===== */
-.timeline{position:relative;margin-top:50px;padding-left:20px;border-left:3px solid #9f85ff;}
-.timeline-item{margin-bottom:35px;}
-.timeline-item h3{color:#9f85ff;}
-.timeline-item p{color:#ccc;font-size:0.95rem;}
+.timeline{
+  position:relative;
+  margin-top:30px;
+  padding-left:25px;
+  border-left:3px solid #9f85ff;
+}
+.timeline-item{margin-bottom:30px;}
+.timeline-item h3{
+  color:#9f85ff;
+  font-size:clamp(1rem,3vw,1.2rem);
+  margin-bottom:5px;
+}
+.timeline-item p{
+  color:#ccc;
+  font-size:clamp(0.85rem,2vw,0.95rem);
+}
 
 /* ===== ENDINGS ===== */
-#endings{background:#0d0e32;padding:40px;border-radius:10px;}
-#endings h2{color:#9f85ff;margin-bottom:20px;}
-#endings p,#endings li{color:#ccc;font-size:0.95rem;}
+#endings{
+  background:#0d0e32;
+  padding:30px 20px;
+  border-radius:10px;
+}
+#endings h2{
+  color:#9f85ff;
+  margin-bottom:20px;
+  font-size:clamp(1.3rem,4vw,1.8rem);
+}
+#endings p,#endings li{
+  color:#ccc;
+  font-size:clamp(0.85rem,2vw,0.95rem);
+  line-height:1.7;
+}
+#endings ul{
+  margin-left:20px;
+  margin-top:10px;
+}
 
 /* ===== FOOTER ===== */
-footer{background:#02021a;padding:50px 10%;text-align:center;color:#888;font-size:0.9rem;
-border-top:1px solid rgba(255,255,255,0.1);}
+footer{
+  background:#02021a;
+  padding:40px 5%;
+  text-align:center;
+  color:#888;
+  font-size:clamp(0.8rem,2vw,0.9rem);
+  border-top:1px solid rgba(255,255,255,0.1);
+}
 footer a{margin:0 8px;}
 
-/* ===== RESPONSIVO ===== */
+/* ===== RESPONSIVO MOBILE ===== */
 @media(max-width:768px){
-#hero h1{font-size:2.4rem;}
-header{flex-direction:column;align-items:flex-start;padding:10px 8%;}
-nav a{margin:0 10px;}
+  header{
+    flex-direction:column;
+    align-items:center;
+    padding:12px 5%;
+  }
+  header h1{font-size:1.1rem;}
+  nav{justify-content:center;margin-top:10px;}
+  nav a{font-size:0.85rem;margin:0;}
+  section{padding:50px 5%;}
+  #hero{padding:120px 5% 50px;}
+  .story-grid,.characters-grid,.corr-grid,.abilities-grid{
+    grid-template-columns:1fr;
+  }
+  .carousel-btn{width:35px;height:35px;font-size:1.2rem;}
+  .carousel-btn.prev{left:5px;}
+  .carousel-btn.next{right:5px;}
+}
+
+/* ===== RESPONSIVO TABLET ===== */
+@media(min-width:769px) and (max-width:1024px){
+  section{padding:60px 6%;}
+  .story-grid,.characters-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+  .corr-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+/* ===== RESPONSIVO ULTRAWIDE ===== */
+@media(min-width:1600px){
+  section{padding:80px 10%;}
+  .section-title{font-size:2.5rem;}
 }
 </style>
 </head>
@@ -219,28 +413,28 @@ nav a{margin:0 10px;}
   <div class="carousel-wrap">
     <div class="carousel-track" id="track">
       <div class="dungeon-slide">
-        <img src="./images/dungeons/shadow-woods.png" alt="">
+        <img src="./images/dungeons/shadow-woods.png" alt="Floresta Sombria">
         <h3>Floresta Sombria</h3><p>Puzzles de luz e sombra; Boss: espírito corrompido.</p>
       </div>
       <div class="dungeon-slide">
-        <img src="./images/dungeons/cave-of-sorrows.png" alt="">
+        <img src="./images/dungeons/cave-of-sorrows.png" alt="Caverna dos Lamentos">
         <h3>Caverna dos Lamentos</h3><p>Ritmos e melodias para acalmar espíritos.</p>
       </div>
       <div class="dungeon-slide">
-        <img src="./images/dungeons/cloudy-lake.png" alt="">
+        <img src="./images/dungeons/cloudy-lake.png" alt="Lago Turvo">
         <h3>Lago Turvo</h3><p>Purifique as águas venenosas; Boss: entidade aquática.</p>
       </div>
       <div class="dungeon-slide">
-        <img src="./images/dungeons/gerudo-fortress.png" alt="">
+        <img src="./images/dungeons/gerudo-fortress.png" alt="Fortaleza Gerudo">
         <h3>Fortaleza Gerudo Corrompida</h3><p>Stealth e portais; Boss: Koume & Kotake.</p>
       </div>
       <div class="dungeon-slide">
-        <img src="./images/dungeons/spirit-temple.png" alt="">
+        <img src="./images/dungeons/spirit-temple.png" alt="Templo dos Espíritos">
         <h3>Templo dos Espíritos</h3><p>Labirinto psicológico; Boss final: Avatar da Corrupção.</p>
       </div>
     </div>
-    <button class="carousel-btn prev" id="prev">‹</button>
-    <button class="carousel-btn next" id="next">›</button>
+    <button class="carousel-btn prev" id="prev" aria-label="Anterior">‹</button>
+    <button class="carousel-btn next" id="next" aria-label="Próximo">›</button>
   </div>
 </section>
 
@@ -250,7 +444,7 @@ nav a{margin:0 10px;}
   <div class="timeline">
     <div class="timeline-item"><h3>1998 — Ocarina of Time</h3><p>Link derrota Ganon e retorna à infância.</p></div>
     <div class="timeline-item"><h3>1999 — Shadow Heir</h3><p>A maldição desperta; Link luta contra si mesmo.</p></div>
-    <div class="timeline-item"><h3>2000 — Majora’s Mask</h3><p>Link purifica a alma e parte em busca de Navi.</p></div>
+    <div class="timeline-item"><h3>2000 — Majora's Mask</h3><p>Link purifica a alma e parte em busca de Navi.</p></div>
   </div>
 </section>
 
@@ -274,17 +468,27 @@ document.querySelectorAll('a[href^="#"]').forEach(link=>{
   link.addEventListener('click',e=>{
     e.preventDefault();
     const el=document.querySelector(link.getAttribute('href'));
-    if(el){ window.scrollTo({top:el.offsetTop-70,behavior:'smooth'}); }
+    if(el){
+      const offset=window.innerWidth<768?60:70;
+      window.scrollTo({top:el.offsetTop-offset,behavior:'smooth'});
+    }
   });
 });
 
-// Carrossel simples
+// Carrossel
 const track=document.getElementById('track'),
 prev=document.getElementById('prev'),
 next=document.getElementById('next');
 let index=0;
-next.onclick=()=>{index=(index+1)%5;track.style.transform=`translateX(-${index*100}%)`;};
-prev.onclick=()=>{index=(index+4)%5;track.style.transform=`translateX(-${index*100}%)`;};
+const total=5;
+next.onclick=()=>{index=(index+1)%total;track.style.transform=`translateX(-${index*100}%)`;};
+prev.onclick=()=>{index=(index+total-1)%total;track.style.transform=`translateX(-${index*100}%)`;};
+
+// Suporte a teclado no carrossel
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft')prev.click();
+  if(e.key==='ArrowRight')next.click();
+});
 </script>
 </body>
 </html>
